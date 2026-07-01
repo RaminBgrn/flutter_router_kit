@@ -38,4 +38,87 @@ class AppNav {
   static void pop([Object? result]) => _context.pop(result);
 
   static bool canPop() => _context.canPop();
+
+  /// معادل Get.dialog با تمام پراپرتی‌های showDialog فلاتر.
+  /// از همون rootNavigatorKey استفاده می‌کنه، پس هم تو ویجت هم تو کنترلر کار می‌کنه.
+  static Future<T?> dialog<T>({
+    required WidgetBuilder builder,
+    bool barrierDismissible = true,
+    Color? barrierColor = Colors.black54,
+    String? barrierLabel,
+    bool useSafeArea = true,
+    bool useRootNavigator = true,
+    RouteSettings? routeSettings,
+    Offset? anchorPoint,
+    TraversalEdgeBehavior? traversalEdgeBehavior,
+  }) {
+    return showDialog<T>(
+      context: _context,
+      builder: builder,
+      barrierDismissible: barrierDismissible,
+      barrierColor: barrierColor,
+      barrierLabel: barrierLabel,
+      useSafeArea: useSafeArea,
+      useRootNavigator: useRootNavigator,
+      routeSettings: routeSettings,
+      anchorPoint: anchorPoint,
+      traversalEdgeBehavior: traversalEdgeBehavior,
+    );
+  }
+
+  /// معادل Get.generalDialog با تمام پراپرتی‌های showGeneralDialog فلاتر.
+  static Future<T?> generalDialog<T>({
+    required RoutePageBuilder pageBuilder,
+    bool barrierDismissible = false,
+    String? barrierLabel,
+    Color barrierColor = const Color(0x80000000),
+    Duration transitionDuration = const Duration(milliseconds: 200),
+    RouteTransitionsBuilder? transitionBuilder,
+    bool useRootNavigator = true,
+    RouteSettings? routeSettings,
+    Offset? anchorPoint,
+  }) {
+    return showGeneralDialog<T>(
+      context: _context,
+      pageBuilder: pageBuilder,
+      barrierDismissible: barrierDismissible,
+      barrierLabel: barrierLabel,
+      barrierColor: barrierColor,
+      transitionDuration: transitionDuration,
+      transitionBuilder: transitionBuilder,
+      useRootNavigator: useRootNavigator,
+      routeSettings: routeSettings,
+      anchorPoint: anchorPoint,
+    );
+  }
+
+  /// معادل Get.bottomSheet
+  static Future<T?> bottomSheet<T>({
+    required Widget widget,
+    Color? backgroundColor,
+    bool isDismissible = true,
+    bool enableDrag = true,
+    bool isScrollControlled = false,
+    ShapeBorder? shape,
+    Clip? clipBehavior,
+    Color? barrierColor,
+    bool useRootNavigator = false,
+    RouteSettings? routeSettings,
+    AnimationController? transitionAnimationController,
+  }) {
+    return showModalBottomSheet<T>(
+      context: _context,
+      builder: (_) => widget,
+      backgroundColor: backgroundColor,
+      isDismissible: isDismissible,
+      enableDrag: enableDrag,
+      isScrollControlled: isScrollControlled,
+      shape: shape,
+      clipBehavior: clipBehavior,
+      barrierColor: barrierColor,
+      useRootNavigator: useRootNavigator,
+      routeSettings: routeSettings,
+      transitionAnimationController: transitionAnimationController,
+    );
+  }
 }
