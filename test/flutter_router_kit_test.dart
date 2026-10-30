@@ -14,22 +14,22 @@ class _FakeBinding extends Bindings {
 
 void main() {
   group('AppNavDestination', () {
-    test('selectedIcon به‌صورت پیش‌فرض null است', () {
+    test('selectedIcon is null by default', () {
       const destination = AppNavDestination(
         icon: Icon(Icons.home),
-        label: 'خانه',
+        label: 'Home',
       );
 
-      expect(destination.label, 'خانه');
+      expect(destination.label, 'Home');
       expect(destination.selectedIcon, isNull);
     });
 
-    test('selectedIcon وقتی داده شود نگه داشته می‌شود', () {
+    test('selectedIcon is kept when provided', () {
       const selected = Icon(Icons.home_filled);
       const destination = AppNavDestination(
         icon: Icon(Icons.home),
         selectedIcon: selected,
-        label: 'خانه',
+        label: 'Home',
       );
 
       expect(destination.selectedIcon, same(selected));
@@ -37,7 +37,7 @@ void main() {
   });
 
   group('buildWithBinding', () {
-    test('قبل از ساخت صفحه، dependencies بایندینگ را صدا می‌زند', () {
+    test('calls the binding dependencies before building the page', () {
       final binding = _FakeBinding();
       var pageBuilt = false;
 
@@ -54,7 +54,7 @@ void main() {
       expect(result, isA<SizedBox>());
     });
 
-    test('دقیقاً همان ویجتی را برمی‌گرداند که page ساخته', () {
+    test('returns exactly the widget that page built', () {
       const page = SizedBox(key: ValueKey('page'));
 
       final result = buildWithBinding(
@@ -67,11 +67,11 @@ void main() {
   });
 
   group('buildShellRouter', () {
-    test('روتر را با initialLocation و routeهای بیرون از شل می‌سازد', () {
+    test('builds the router with an initialLocation and routes outside the shell', () {
       final router = buildShellRouter(
         initialLocation: '/home',
         destinations: const [
-          AppNavDestination(icon: Icon(Icons.home), label: 'خانه'),
+          AppNavDestination(icon: Icon(Icons.home), label: 'Home'),
         ],
         branches: [
           StatefulShellBranch(routes: [

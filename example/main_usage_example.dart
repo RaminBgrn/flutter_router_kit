@@ -1,22 +1,23 @@
 // =========================================================
-// این فایل نمونه‌ی استفاده از پکیج تو یه اپ دیگه‌ست.
-// خودِ این فایل جزو پکیج نیست - این رو تو پروژه‌ی مصرف‌کننده می‌نویسی.
+// This file is an example of using the package in another app.
+// This file itself is not part of the package. You write this
+// in the consuming project.
 // =========================================================
 
 import 'package:flutter/material.dart';
-// فقط از API عمومی پکیج استفاده کن، نه فایل‌های داخلی src/
-// (go_router هم از همین ورودی re-export شده)
+// Use only the public API of the package, not the internal src/ files
+// (go_router is also re-exported from this entrypoint)
 import 'package:flutter_router_kit/flutter_router_kit.dart';
 import 'package:get/get.dart';
 
-// ---- صفحات خودِ این اپ ----
+// ---- This app's own pages ----
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
   @override
   Widget build(BuildContext context) => ListView.builder(
         itemCount: 10,
         itemBuilder: (context, i) => ListTile(
-          title: Text('محصول $i'),
+          title: Text('Product $i'),
           onTap: () =>
               context.pushNamed('productDetail', pathParameters: {'id': '$i'}),
         ),
@@ -27,13 +28,13 @@ class ProductDetailPage extends StatelessWidget {
   const ProductDetailPage({super.key, required this.id});
   final String id;
   @override
-  Widget build(BuildContext context) => Center(child: Text('محصول $id'));
+  Widget build(BuildContext context) => Center(child: Text('Product $id'));
 }
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
   @override
-  Widget build(BuildContext context) => const Center(child: Text('پروفایل'));
+  Widget build(BuildContext context) => const Center(child: Text('Profile'));
 }
 
 class HomeBinding extends Bindings {
@@ -43,15 +44,15 @@ class HomeBinding extends Bindings {
   }
 }
 
-// ---- ساخت روتر با پکیج ----
+// ---- Building the router with the package ----
 final appRouter = buildShellRouter(
   initialLocation: '/home',
   destinations: const [
-    AppNavDestination(icon: Icon(Icons.home), label: 'خانه'),
-    AppNavDestination(icon: Icon(Icons.person), label: 'پروفایل'),
+    AppNavDestination(icon: Icon(Icons.home), label: 'Home'),
+    AppNavDestination(icon: Icon(Icons.person), label: 'Profile'),
   ],
   onRootBackPressed: () {
-    // مثلا دیالوگ تایید خروج از اپ
+    // For example, show an exit confirmation dialog
   },
   branches: [
     StatefulShellBranch(routes: [

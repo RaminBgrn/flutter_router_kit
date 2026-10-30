@@ -1,4 +1,4 @@
 ## 0.1.0
-- نسخه اولیه: MainWrapper با StatefulShellRoute.indexedStack، مدیریت بک فیزیکی، پشتیبانی GetX Bindings.
+- Initial release: MainWrapper with StatefulShellRoute.indexedStack, physical back button handling, GetX Bindings support.
 ## 0.2.0
-- اضافه شدن AppNav برای ناوبری بدون context (داخل Controller ها)
+- Added AppNav for context-free navigation (from inside controllers).

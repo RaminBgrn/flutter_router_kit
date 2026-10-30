@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-/// تابع کمکی برای استفاده از GetX Bindings داخل builder های go_router.
-/// چون go_router مفهوم Binding نمی‌شناسه (مال GetX هست)، با این تابع
-/// قبل از ساخته شدن صفحه، دستی dependencies() رو صدا می‌زنیم.
+/// A helper for using GetX Bindings inside go_router builders.
+/// Since go_router has no concept of a Binding (that belongs to GetX), this
+/// function calls dependencies() manually before the page is built.
 ///
-/// استفاده در هر اپ:
+/// Usage in any app:
 /// ```dart
 /// builder: (context, state) => buildWithBinding(
 ///   binding: HomeBinding(),

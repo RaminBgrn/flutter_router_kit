@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// چون GetxController به BuildContext دسترسی مستقیم نداره (برخلاف ویجت‌ها)،
-/// این کلاس با استفاده از همون [rootNavigatorKey] که به GoRouter دادیم
-/// context رو از پشت‌صحنه می‌گیره و کار ناوبری رو انجام میده.
+/// Since a GetxController has no direct access to a BuildContext (unlike
+/// widgets), this class uses the same [rootNavigatorKey] that was given to
+/// GoRouter to grab the context behind the scenes and do the navigation.
 ///
-/// تو کنترلرها به‌جای Get.offNamed/Get.toNamed از این استفاده کن:
+/// In controllers, use this instead of Get.offNamed/Get.toNamed:
 /// AppNav.goNamed(RoutePath.homeName);
 class AppNav {
   AppNav._();
 
   static GlobalKey<NavigatorState>? _navigatorKey;
 
-  /// یک بار تو app_router.dart صداش بزن و همون rootNavigatorKey رو بده
+  /// Call it once in app_router.dart and give it the same rootNavigatorKey
   static void init(GlobalKey<NavigatorState> key) => _navigatorKey = key;
 
   static BuildContext get _context {
     final ctx = _navigatorKey?.currentContext;
-    assert(
-        ctx != null, 'AppNav.init() صدا زده نشده یا Navigator هنوز mount نشده');
+    assert(ctx != null,
+        'AppNav.init() has not been called, or the Navigator is not mounted yet');
     return ctx!;
   }
 
@@ -39,8 +39,8 @@ class AppNav {
 
   static bool canPop() => _context.canPop();
 
-  /// معادل Get.dialog با تمام پراپرتی‌های showDialog فلاتر.
-  /// از همون rootNavigatorKey استفاده می‌کنه، پس هم تو ویجت هم تو کنترلر کار می‌کنه.
+  /// The equivalent of Get.dialog, with all of Flutter's showDialog properties.
+  /// It uses the same rootNavigatorKey, so it works in both widgets and controllers.
   static Future<T?> dialog<T>({
     required WidgetBuilder builder,
     bool barrierDismissible = true,
@@ -66,7 +66,7 @@ class AppNav {
     );
   }
 
-  /// معادل Get.generalDialog با تمام پراپرتی‌های showGeneralDialog فلاتر.
+  /// The equivalent of Get.generalDialog, with all of Flutter's showGeneralDialog properties.
   static Future<T?> generalDialog<T>({
     required RoutePageBuilder pageBuilder,
     bool barrierDismissible = false,
@@ -92,7 +92,7 @@ class AppNav {
     );
   }
 
-  /// معادل Get.bottomSheet
+  /// The equivalent of Get.bottomSheet
   static Future<T?> bottomSheet<T>({
     required Widget widget,
     Color? backgroundColor,

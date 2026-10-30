@@ -1,5 +1,5 @@
 name: flutter_router_kit
-description: یک کیت آماده برای راه‌اندازی go_router با AppBar/BottomNav ثابت، nested route، و پشتیبانی از GetX Bindings.
+description: A ready-made kit for setting up go_router with a fixed AppBar/BottomNav shell, nested routes, and GetX Bindings support.
 version: 0.1.0
 publish_to: 'none'
 
