@@ -4,11 +4,10 @@
 // =========================================================
 
 import 'package:flutter/material.dart';
-import 'package:flutter_router_kit/src/bindings/getx_binding_adapter.dart';
-import 'package:flutter_router_kit/src/router/router_kit.dart';
-import 'package:flutter_router_kit/src/widgets/main_wrapper.dart';
+// فقط از API عمومی پکیج استفاده کن، نه فایل‌های داخلی src/
+// (go_router هم از همین ورودی re-export شده)
+import 'package:flutter_router_kit/flutter_router_kit.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 
 // ---- صفحات خودِ این اپ ----
 class HomePage extends StatelessWidget {
