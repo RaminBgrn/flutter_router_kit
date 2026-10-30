@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// نوع تابعی که برای هر آیتم BottomNav نیاز داریم.
+/// The data each BottomNav item needs.
 class AppNavDestination {
   const AppNavDestination({
     required this.icon,
@@ -14,12 +14,13 @@ class AppNavDestination {
   final String label;
 }
 
-/// قاب اصلی و ثابت اپ.
-/// این ویجت فقط یک بار توسط StatefulShellRoute.indexedStack ساخته میشه
-/// و دیگه rebuild نمیشه وقتی بین تب‌ها سوییچ می‌کنی.
+/// The main, fixed frame of the app.
+/// This widget is built only once by StatefulShellRoute.indexedStack
+/// and is not rebuilt when you switch between tabs.
 ///
-/// چون generic نوشته شده، هر اپی که این پکیج رو import کنه فقط کافیه
-/// appBarTitle و destinations خودش رو پاس بده، نیازی به بازنویسی نیست.
+/// Since it is written generically, any app that imports this package only
+/// needs to pass its own destinations (and optionally an appBarBuilder).
+/// There is no need to rewrite it.
 class MainWrapper extends StatelessWidget {
   const MainWrapper({
     super.key,
@@ -29,20 +30,20 @@ class MainWrapper extends StatelessWidget {
     this.onRootBackPressed,
   });
 
-  /// شِل ناوبری که خود go_router در اختیارمون میذاره
+  /// The navigation shell that go_router itself provides
   final StatefulNavigationShell navigationShell;
 
-  /// لیست آیتم‌های BottomNav - این رو هر اپ خودش تعریف می‌کنه
+  /// The list of BottomNav items. Each app defines its own
   final List<AppNavDestination> destinations;
 
-  /// اگه بخوای AppBar سفارشی بسازی (مثلا هر تب AppBar متفاوت داشته باشه)
-  /// این رو پاس بده. اگه ندی، یه AppBar پیش‌فرض ساده ساخته میشه.
+  /// If you want to build a custom AppBar (for example a different AppBar
+  /// per tab), pass this. If you do not, a simple default AppBar is built.
   final PreferredSizeWidget Function(BuildContext context, int currentIndex)?
       appBarBuilder;
 
-  /// وقتی کاربر روی تب اول (ریشه) هست و دکمه بک فیزیکی رو میزنه
-  /// و دیگه جایی برای pop نیست، این callback صدا زده میشه.
-  /// خود اپ تصمیم میگیره: دیالوگ خروج نشون بده، یا اپ رو ببنده و ...
+  /// Called when the user is on the first tab (the root) and presses the
+  /// physical back button and there is nowhere left to pop.
+  /// The app itself decides: show an exit dialog, close the app, and so on.
   final VoidCallback? onRootBackPressed;
 
   void _onTabTapped(int index) {
@@ -54,9 +55,11 @@ class MainWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // context.canPop() از خود go_router میاد و بررسی میکنه که آیا
-    // Navigator فعلی (یعنی همون branch/تبی که الان توشیم) استک pop‌پذیر داره یا نه.
-    // این جایگزین درستِ navigationShell.canPop هست که اصلاً وجود نداره.
+    // context.canPop() comes from go_router itself and checks whether the
+    // current Navigator (that is, the branch/tab we are in) has a stack
+    // that can be popped.
+    // This is the correct replacement for navigationShell.canPop, which
+    // does not exist at all.
     final canPopCurrentBranch = context.canPop();
 
     return PopScope(
@@ -64,19 +67,19 @@ class MainWrapper extends StatelessWidget {
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
 
-        // حالت ۱: داخل یه nested route هستیم -> go_router خودش برمیگردونه
+        // Case 1: we are inside a nested route -> go_router pops it itself
         if (canPopCurrentBranch) {
           context.pop();
           return;
         }
 
-        // حالت ۲: روی ریشه‌ی یکی از تب‌های غیر از تب اول هستیم -> برو تب اول
+        // Case 2: we are at the root of a tab other than the first -> go to the first tab
         if (navigationShell.currentIndex != 0) {
           _onTabTapped(0);
           return;
         }
 
-        // حالت ۳: روی ریشه‌ی تب اول هستیم و دیگه جایی نیست -> به خود اپ بسپار
+        // Case 3: we are at the root of the first tab and there is nowhere left -> hand it to the app itself
         onRootBackPressed?.call();
       },
       child: Scaffold(

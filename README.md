@@ -1,14 +1,14 @@
 # flutter_router_kit
 
-کیت آماده برای راه‌اندازی go_router با:
+A ready-made kit for setting up go_router with:
 
-- شل ثابت با `StatefulShellRoute.indexedStack`؛ AppBar و BottomNav با تعویض تب rebuild نمی‌شن
-- پشتیبانی از nested route داخل هر تب
-- مدیریت بک فیزیکی گوشی: اول pop داخل تب فعلی، بعد برگشت به تب اول، و در ریشه‌ی تب اول تحویل به خود اپ
-- ناوبری بدون context از داخل Controllerها با `AppNav`
-- پشتیبانی از GetX Bindings با `buildWithBinding`
+- A fixed shell built on `StatefulShellRoute.indexedStack`, so the AppBar and BottomNav are not rebuilt when switching tabs
+- Nested routes inside each tab
+- Physical back button handling: pop inside the current tab first, then return to the first tab, and at the root of the first tab hand control back to the app
+- Context-free navigation from inside controllers with `AppNav`
+- GetX Bindings support with `buildWithBinding`
 
-## نصب
+## Installation
 
 ```yaml
   flutter_router_kit:
@@ -17,11 +17,11 @@
       ref: main
 ```
 
-وابستگی‌ها: `go_router: ^14.0.0` و `get: ^4.6.6`
+Dependencies: `go_router: ^14.0.0` and `get: ^4.6.6`
 
-## استفاده سریع
+## Quick start
 
-فقط دو چیز از اپ تو لازمه: branchهای هر تب و آیتم‌های BottomNav.
+Your app only needs to provide two things: the branches for each tab and the BottomNav items.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -30,8 +30,8 @@ import 'package:flutter_router_kit/flutter_router_kit.dart';
 final appRouter = buildShellRouter(
   initialLocation: '/home',
   destinations: const [
-    AppNavDestination(icon: Icon(Icons.home), label: 'خانه'),
-    AppNavDestination(icon: Icon(Icons.person), label: 'پروفایل'),
+    AppNavDestination(icon: Icon(Icons.home), label: 'Home'),
+    AppNavDestination(icon: Icon(Icons.person), label: 'Profile'),
   ],
   branches: [
     StatefulShellBranch(routes: [
@@ -43,31 +43,31 @@ final appRouter = buildShellRouter(
   ],
 );
 
-// در اپ:
+// In your app:
 MaterialApp.router(routerConfig: appRouter);
 ```
 
-نمونه‌ی کامل‌تر، با route تو‌در‌تو و Binding، در `example/main_usage_example.dart` هست.
+A fuller example, with a nested route and a Binding, is in `example/main_usage_example.dart`.
 
-## پارامترهای `buildShellRouter`
+## `buildShellRouter` parameters
 
-- `initialLocation` (اجباری): مسیر شروع اپ
-- `branches` (اجباری): لیست `StatefulShellBranch`ها، یکی برای هر تب
-- `destinations` (اجباری): آیتم‌های BottomNav از نوع `AppNavDestination` شامل `icon` و `label` و `selectedIcon` اختیاری
-- `outsideRoutes`: routeهای بیرون از شل، مثل صفحه‌ی لاگین
-- `rootNavigatorKey`: کلید Navigator ریشه؛ اگه ندی خودش ساخته می‌شه. برای استفاده از `AppNav` همین کلید رو باید بهش بدی (بخش بعد)
-- `appBarBuilder`: ساخت AppBar سفارشی بر اساس ایندکس تب فعلی؛ اگه ندی یه AppBar پیش‌فرض با عنوان تب فعلی ساخته می‌شه
-- `onRootBackPressed`: وقتی کاربر در ریشه‌ی تب اول بک فیزیکی می‌زنه و جایی برای pop نیست، این callback صدا زده می‌شه تا خود اپ تصمیم بگیره (مثلاً دیالوگ تأیید خروج)
+- `initialLocation` (required): the starting location of the app
+- `branches` (required): the list of `StatefulShellBranch`es, one per tab
+- `destinations` (required): the BottomNav items of type `AppNavDestination`, with an `icon`, a `label`, and an optional `selectedIcon`
+- `outsideRoutes`: routes that live outside the shell, such as a login page
+- `rootNavigatorKey`: the root Navigator key. One is created for you if you do not pass it. To use `AppNav` you must pass the same key to it (see below)
+- `appBarBuilder`: builds a custom AppBar based on the current tab index. If you do not pass it, a default AppBar with the current tab label as its title is built
+- `onRootBackPressed`: called when the user presses the physical back button at the root of the first tab and there is nowhere left to pop, so the app itself can decide what to do (for example show an exit confirmation dialog)
 
-## ناوبری بدون context با `AppNav`
+## Context-free navigation with `AppNav`
 
-داخل GetX Controllerها به BuildContext دسترسی نداری. `AppNav` با همون `rootNavigatorKey`، context رو می‌گیره و این کارها رو انجام می‌ده:
+GetX controllers do not have direct access to a BuildContext. `AppNav` grabs the context through the same `rootNavigatorKey` and provides:
 
-- `AppNav.goNamed(name)` و `AppNav.pushNamed(name)` با `pathParameters` و `extra`
-- `AppNav.go(path)`، `AppNav.pop()` و `AppNav.canPop()`
-- `AppNav.dialog(...)`، `AppNav.generalDialog(...)` و `AppNav.bottomSheet(...)` معادل توابع خود فلاتر
+- `AppNav.goNamed(name)` and `AppNav.pushNamed(name)`, with `pathParameters` and `extra`
+- `AppNav.go(path)`, `AppNav.pop()` and `AppNav.canPop()`
+- `AppNav.dialog(...)`, `AppNav.generalDialog(...)` and `AppNav.bottomSheet(...)`, mirroring the Flutter functions of the same behaviour
 
-قبل از استفاده، یک بار موقع ساخت روتر init کن:
+Before using it, initialize it once while building your router:
 
 ```dart
 final rootKey = GlobalKey<NavigatorState>();
@@ -80,9 +80,9 @@ final appRouter = buildShellRouter(
 );
 ```
 
-## استفاده از GetX Binding در routeها
+## Using a GetX Binding in routes
 
-go_router مفهوم Binding رو نمی‌شناسه، پس داخل builder صدا بزن:
+go_router has no concept of a Binding, so call this inside the builder:
 
 ```dart
 GoRoute(
@@ -93,3 +93,7 @@ GoRoute(
   ),
 )
 ```
+
+## License
+
+MIT. See the `LICENSE` file.

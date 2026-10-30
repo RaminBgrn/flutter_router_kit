@@ -3,13 +3,13 @@ import 'package:go_router/go_router.dart';
 
 import '../widgets/main_wrapper.dart';
 
-/// این تابع کل بویلرپلیتِ ساخت GoRouter با shell رو می‌پوشونه.
-/// هر اپ فقط کافیه:
-///  ۱. لیست branchها (تب‌ها) رو با routeهای خودش بسازه
-///  ۲. لیست destinations (آیتم‌های BottomNav) رو بده
-///  ۳. (اختیاری) routeهای بیرون از شل (مثل login) رو بده
+/// This function wraps all the boilerplate of building a GoRouter with a shell.
+/// Each app only needs to:
+///  1. Build the list of branches (tabs) with its own routes
+///  2. Provide the list of destinations (BottomNav items)
+///  3. (Optional) Provide routes that live outside the shell (such as login)
 ///
-/// و دیگه نیازی نیست خودش StatefulShellRoute و MainWrapper رو دوباره بنویسه.
+/// and it no longer needs to write StatefulShellRoute and MainWrapper itself.
 GoRouter buildShellRouter({
   required String initialLocation,
   required List<StatefulShellBranch> branches,
